@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  pg:
+    image: bitnami/postgresql:latest
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
+    command: redis-server --save 60 1

@@ -1,0 +1,79 @@
+{
+  "name": "paybridge",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "cleanup": "rm -rf dist && rm -rf node_modules",
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/src/server",
+    "test:int": "vitest -c ./vitest.config.integration.ts",
+    "test:unit": "vitest -c ./vitest.config.unit.ts",
+    "coverage": "env-cmd -f .env.test vitest run --coverage",
+    "db:local": "env-cmd -f .env docker compose up -d",
+    "db:push": "",
+    "db:deploy": "",
+    "db:studio": "",
+    "db:migrate-dev": "",
+    "start:migrate:prod": ""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@fastify/autoload": "^5.10.0",
+    "@fastify/cors": "^9.0.1",
+    "@fastify/env": "^4.4.0",
+    "@fastify/helmet": "^11.1.1",
+    "@fastify/jwt": "^8.0.1",
+    "@fastify/sensible": "^5.6.0",
+    "@fastify/swagger": "^8.15.0",
+    "@fastify/swagger-ui": "^4.1.0",
+    "@fastify/type-provider-typebox": "^4.1.0",
+    "@prisma/client": "^6.0.1",
+    "axios": "^1.7.5",
+    "bull": "^4.16.1",
+    "dotenv": "^16.4.5",
+    "env-cmd": "^10.1.0",
+    "fastify": "^4.28.1",
+    "fastify-cli": "^6.3.0",
+    "fastify-cors": "^6.1.0",
+    "fastify-jwt": "^4.2.0",
+    "fastify-plugin": "^4.5.1",
+    "fastify-swagger": "^5.2.0",
+    "fastify-zod": "^1.4.0",
+    "knex": "^3.1.0",
+    "pg": "^8.12.0",
+    "pino": "^9.3.2",
+    "pino-pretty": "^11.2.2",
+    "resend": "^4.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@testcontainers/postgresql": "^10.13.0",
+    "@types/node": "^22.5.0",
+    "@vitest/coverage-v8": "^2.0.5",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "fastify-tsconfig": "^2.0.0",
+    "husky": "^9.1.5",
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "tap": "^21.0.1",
+    "testcontainers": "^10.13.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4",
+    "vitest": "^2.0.5"
+  },
+  "lint-staged": {
+    "*.{js, jsx,ts,tsx}": [
+      "eslint --quiet --fix"
+    ],
+    "*.{json,js,ts,jsx,tsx,html}": [
+      "prettier --write --ignore-unknown"
+    ]
+  }
+}
