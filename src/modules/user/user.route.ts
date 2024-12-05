@@ -4,7 +4,7 @@ import { $ref } from './user.schema.js'
 
 async function userRoutes(server: FastifyInstance) {
   server.post(
-    '/account',
+    '/user',
     {
       schema: {
         body: $ref('createUserSchema'),

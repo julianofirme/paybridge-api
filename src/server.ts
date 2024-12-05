@@ -2,8 +2,9 @@
 import app from './app.js'
 import process from 'process'
 import { logger } from './logger/logger.js'
+import 'dotenv/config'
 
-const PORT = 3000
+const PORT = Number(process.env.PORT) ?? 3030
 
 async function main() {
   try {

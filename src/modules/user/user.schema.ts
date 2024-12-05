@@ -9,6 +9,8 @@ const userCore = {
     })
     .email(),
   name: z.string(),
+  document: z.string(),
+  accountType: z.string(),
 }
 
 const createUserSchema = z.object({

@@ -48,7 +48,7 @@ model Merchant {
 model Wallet {
   id           String   @id @default(uuid())
   userId       String   @map("user_id")
-  currencyCode Int      @map("currency_code")
+  currencyCode String      @map("currency_code")
   balance      Int      @map("balance")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
