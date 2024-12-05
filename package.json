@@ -12,11 +12,11 @@
     "test:unit": "vitest -c ./vitest.config.unit.ts",
     "coverage": "env-cmd -f .env.test vitest run --coverage",
     "db:local": "env-cmd -f .env docker compose up -d",
-    "db:push": "",
-    "db:deploy": "",
-    "db:studio": "",
-    "db:migrate-dev": "",
-    "start:migrate:prod": ""
+    "db:push": "npx prisma db push",
+    "db:deploy": "npx prisma migrate deploy",
+    "db:studio": "npx prisma studio",
+    "db:migrate-dev": "npx prisma migrate dev",
+    "start:migrate:prod": "prisma migrate deploy && npm run start"
   },
   "keywords": [],
   "author": "",
