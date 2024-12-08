@@ -5,7 +5,9 @@ import fastifyCors from '@fastify/cors'
 import 'dotenv/config'
 import userRoutes from './modules/user/user.route.js'
 import walletRoutes from './modules/wallet/wallet.route.js'
+import merchantRoutes from './modules/merchant/merchant.route.js'
 import { walletSchema } from './modules/wallet/wallet.schema.js'
+import { merchantSchemas } from './modules/merchant/merchant.schema.js'
 import { userSchemas } from './modules/user/user.schema.js'
 import { errorHandler } from './utils/error-handler.js'
 import fastifyHelmet from '@fastify/helmet'
@@ -40,6 +42,7 @@ app.get('/healthcheck', async function () {
 
 app.register(userRoutes)
 app.register(walletRoutes)
+app.register(merchantRoutes, { prefix: '/merchants' })
 
 app.register(fastifySwagger, {})
 app.register(fastifySwaggerUi, {
@@ -59,7 +62,8 @@ app.ready((err) => {
 
 for (const schema of [
   ...userSchemas,
-  ...walletSchema
+  ...walletSchema,
+  ...merchantSchemas
 ]) {
   app.addSchema(schema)
 }
