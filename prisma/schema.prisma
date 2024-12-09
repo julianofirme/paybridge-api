@@ -13,12 +13,28 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum WalletType {
+  PERSONAL
+  BUSINESS
+}
+
+enum TransferStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum CurrencyCode {
+  BRL
+  USD
+  EUR
+}
+
 model User {
   id           String   @id @default(uuid())
   name         String?
   email        String   @unique
-  document     String   @unique // CPF or CNPJ
-  accountType  String   @default("PF") // 'PF' or 'PJ'
+  document     String   @unique // CPF
   passwordHash String   @map("password_hash")
   salt         String   @map("salt")
   createdAt    DateTime @default(now()) @map("created_at")
@@ -36,24 +52,28 @@ model Merchant {
   businessName      String  @map("business_name")
   businessAddress   String? @map("business_address")
   contactPhone      String? @map("contact_phone")
-  taxIdentification String  @map("tax_identification")
+  taxIdentification String  @map("tax_identification") // CNPJ
   industryType      String? @map("industry_type")
   accountManager    String? @map("account_manager")
 
-  User User @relation(fields: [userId], references: [id])
+  User   User     @relation(fields: [userId], references: [id])
+  Wallet Wallet[]
 
   @@map("merchants")
 }
 
 model Wallet {
-  id           String   @id @default(uuid())
-  userId       String   @map("user_id")
-  currencyCode String      @map("currency_code")
-  balance      Int      @map("balance")
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id           String       @id @default(uuid())
+  userId       String       @map("user_id")
+  merchantId   String?      @map("merchant_id")
+  currencyCode CurrencyCode @map("currency_code")
+  balance      Int          @map("balance")
+  walletType   WalletType   @default(PERSONAL) @map("wallet_type") // 'personal' or 'business'
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
 
   user              User       @relation(fields: [userId], references: [id])
+  merchant          Merchant?  @relation(fields: [merchantId], references: [id])
   sentTransfers     Transfer[] @relation("SourceWalletTransfers")
   receivedTransfers Transfer[] @relation("DestinationWalletTransfers")
   Ledger            Ledger[]
@@ -62,15 +82,16 @@ model Wallet {
 }
 
 model Transfer {
-  id                  String   @id @default(uuid()) @map("id")
-  sourceWalletId      String   @map("source_wallet_id")
-  destinationWalletId String   @map("destination_wallet_id")
-  amount              Int      @map("amount")
-  currency            String   @default("BRL") @map("currency")
-  status              String   @default("pending") @map("status") // Status: pending, completed, failed
-  reason              String?  @map("reason") // Optional, for failures or specific notes
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
+  id                  String         @id @default(uuid()) @map("id")
+  initiatedBy         String         @map("initiated_by")
+  sourceWalletId      String         @map("source_wallet_id")
+  destinationWalletId String         @map("destination_wallet_id")
+  amount              Int            @map("amount")
+  currencyCode        CurrencyCode   @map("currency_code")
+  status              TransferStatus @default(PENDING) @map("status") // Status: pending, completed, failed
+  reason              String?        @map("reason") // Optional, for failures or specific notes
+  createdAt           DateTime       @default(now()) @map("created_at")
+  updatedAt           DateTime       @updatedAt @map("updated_at")
 
   sourceWallet      Wallet   @relation("SourceWalletTransfers", fields: [sourceWalletId], references: [id])
   destinationWallet Wallet   @relation("DestinationWalletTransfers", fields: [destinationWalletId], references: [id])
@@ -80,12 +101,13 @@ model Transfer {
 }
 
 model Ledger {
-  id         String   @id @default(uuid()) @map("id")
-  walletId   String   @map("wallet_id")
-  transferId String  @map("transfer_id")
-  amount     Int  @map("amount") // Positive for credit, negative for debit
-  type       String   @map("type") // e.g., "transfer", "adjustment", "fee"
-  createdAt  DateTime @default(now()) @map("created_at")
+  id           String       @id @default(uuid()) @map("id")
+  walletId     String       @map("wallet_id")
+  transferId   String       @map("transfer_id")
+  currencyCode CurrencyCode @map("currency_code")
+  amount       Int          @map("amount") // Positive for credit, negative for debit
+  type         String       @map("type") // e.g., "transfer", "adjustment", "fee"
+  createdAt    DateTime     @default(now()) @map("created_at")
 
   wallet   Wallet   @relation(fields: [walletId], references: [id])
   transfer Transfer @relation(fields: [transferId], references: [id])
