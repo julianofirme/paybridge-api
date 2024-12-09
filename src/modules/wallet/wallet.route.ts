@@ -1,14 +1,15 @@
 import type { FastifyInstance } from 'fastify';
-import { depositSchema } from './wallet.schema.js';
+import { $ref } from './wallet.schema.js';
 import { handleDeposit } from './wallet.controller.js';
+import { auth } from '../../middleware/auth.js';
 
 
 async function walletRoutes(app: FastifyInstance) {
-  app.post(
+  app.register(auth).post(
     '/deposit',
     {
       schema: {
-        body: depositSchema.shape.body
+        body: $ref('depositSchema'),
       }
     },
     handleDeposit
