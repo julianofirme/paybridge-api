@@ -31,6 +31,7 @@ export async function deposit(walletId: string, amount: number, currencyCode: st
       data: {
         walletId,
         amount,
+        currencyCode,
         type: 'deposit',
         transferId: '', // Since this is a direct deposit, no transfer is involved
       }
