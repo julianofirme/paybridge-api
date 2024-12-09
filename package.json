@@ -16,7 +16,8 @@
     "db:deploy": "npx prisma migrate deploy",
     "db:studio": "npx prisma studio",
     "db:migrate-dev": "npx prisma migrate dev",
-    "start:migrate:prod": "prisma migrate deploy && npm run start"
+    "start:migrate:prod": "prisma migrate deploy && npm run start",
+    "system-user": "tsx scripts/create-system-user"
   },
   "keywords": [],
   "author": "",

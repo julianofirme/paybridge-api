@@ -3,3 +3,5 @@ knexfile.ts
 migrations
 
 seeds
+
+scripts

@@ -16,6 +16,7 @@ datasource db {
 enum WalletType {
   PERSONAL
   BUSINESS
+  SYSTEM
 }
 
 enum TransferStatus {
@@ -28,6 +29,12 @@ enum CurrencyCode {
   BRL
   USD
   EUR
+}
+
+enum LedgerType {
+  DEPOSIT
+  WITHDRAW
+  TRANSFER
 }
 
 model User {
@@ -64,15 +71,16 @@ model Merchant {
 
 model Wallet {
   id           String       @id @default(uuid())
-  userId       String       @map("user_id")
+  userId       String?      @map("user_id")
   merchantId   String?      @map("merchant_id")
   currencyCode CurrencyCode @map("currency_code")
   balance      Int          @map("balance")
   walletType   WalletType   @default(PERSONAL) @map("wallet_type") // 'personal' or 'business'
-  createdAt    DateTime     @default(now()) @map("created_at")
-  updatedAt    DateTime     @updatedAt @map("updated_at")
+  isSystem     Boolean  @default(false) @map("is_system")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
-  user              User       @relation(fields: [userId], references: [id])
+  user              User?      @relation(fields: [userId], references: [id])
   merchant          Merchant?  @relation(fields: [merchantId], references: [id])
   sentTransfers     Transfer[] @relation("SourceWalletTransfers")
   receivedTransfers Transfer[] @relation("DestinationWalletTransfers")
@@ -83,7 +91,6 @@ model Wallet {
 
 model Transfer {
   id                  String         @id @default(uuid()) @map("id")
-  initiatedBy         String         @map("initiated_by")
   sourceWalletId      String         @map("source_wallet_id")
   destinationWalletId String         @map("destination_wallet_id")
   amount              Int            @map("amount")

@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import { deposit } from './wallet.service.js';
-import { type DepositInput } from './wallet.schema.js';
+import type { DepositInput } from './wallet.schema.js';
 
 export async function handleDeposit(
   request: FastifyRequest<{
@@ -10,12 +10,13 @@ export async function handleDeposit(
 ) {
   const { walletId, amount, currencyCode } = request.body;
 
-  const wallet = await deposit(walletId, amount, currencyCode);
+  const result = await deposit(walletId, amount, currencyCode);
 
   return reply.code(200).send({
     message: 'Deposit successful',
     data: {
-      wallet
+      wallet: result.wallet,
+      transfer: result.transfer
     }
   });
 }
