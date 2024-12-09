@@ -20,17 +20,13 @@ export async function createMerchant(userId: string, merchantData: CreateMerchan
     throw new BadRequestError('User already has a merchant account');
   }
 
-  if (user.accountType !== 'PJ') {
-    throw new BadRequestError('Only PJ accounts can create merchant profiles');
-  }
-
   // Create merchant account
-  const merchant = await prisma.merchant.create({
-    data: {
-      userId,
-      ...merchantData
-    }
-  });
+  // const merchant = await prisma.merchant.create({
+  //   data: {
+  //     userId,
+  //     ...merchantData
+  //   }
+  // });
 
-  return merchant;
+  // return merchant;
 }
