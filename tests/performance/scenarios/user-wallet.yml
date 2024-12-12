@@ -1,0 +1,21 @@
+config:
+  processor: "./helpers.cjs"
+scenarios:
+  - name: "Create user and wallet flow"
+    flow:
+      # Generate random user data
+      - function: "generateRandomUser"
+      
+      # Create user
+      - post:
+          url: "/auth/register"
+          json:
+            name: "{{ userData.name }}"
+            email: "{{ userData.email }}"
+            password: "{{ userData.password }}"
+            document: "{{ userData.document }}"
+          capture:
+            - json: "$.token"
+              as: "token"
+            - json: "$.user.id"
+              as: "userId"

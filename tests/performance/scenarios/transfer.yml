@@ -1,0 +1,93 @@
+config:
+  target: "http://localhost:3030"  # Adjust this to match your API URL
+  phases:
+    - name: "Warm up phase"  
+      arrivalRate: 5
+      duration: 20
+    - name: "Ramp up phase"  
+      arrivalRate: 5
+      duration: 60
+      rampTo: 20
+  processor: "./helpers.cjs"
+
+  defaults:
+    headers:
+      Content-Type: "application/json"
+      Accept: "application/json"
+
+scenarios:
+  - name: "Transfer between wallets"
+    flow:
+      # Criação do primeiro usuário
+      - function: "generateRandomUser"
+      - post:
+          url: "/auth/register"
+          json:
+            name: "{{ userData.name }}"
+            email: "{{ userData.email }}"
+            password: "{{ userData.password }}"
+            document: "{{ userData.document }}"
+          capture:
+            - json: "$.id"
+              as: "userId1"
+            - json: "$.walletId"
+              as: "walletId1"
+
+      # Login do primeiro usuário para obter o token
+      - post:
+          url: "/auth/login"
+          json:
+            email: "{{ userData.email }}"
+            password: "{{ userData.password }}"
+          capture:
+            - json: "$.token"
+              as: "token1"
+
+      # Criação do segundo usuário
+      - function: "generateRandomUser"
+      - post:
+          url: "/auth/register"
+          json:
+            name: "{{ userData.name }}"
+            email: "{{ userData.email }}"
+            password: "{{ userData.password }}"
+            document: "{{ userData.document }}"
+          capture:
+            - json: "$.id"
+              as: "userId2"
+            - json: "$.walletId"
+              as: "walletId2"
+
+      # Login do segundo usuário para obter o token
+      - post:
+          url: "/auth/login"
+          json:
+            email: "{{ userData.email }}"
+            password: "{{ userData.password }}"
+          capture:
+            - json: "$.token"
+              as: "token2"
+
+      # Depósito no primeiro usuário
+      - post:
+          url: "/wallet/{{ walletId1 }}/deposit"
+          headers:
+            Authorization: "Bearer {{ token1 }}"
+          json:
+            amount: 1000
+            currencyCode: "BRL"
+
+      # Geração de dados de transferência
+      - function: "generateTransferData"
+
+      # Transferência de valores entre carteiras
+      - post:
+          url: "/transfer/send"
+          headers:
+            Authorization: "Bearer {{ token1 }}"
+          json:
+            sourceWalletId: "{{ walletId1 }}"
+            destinationWalletId: "{{ walletId2 }}"
+            amount: "{{ transferAmount }}"
+            currencyCode: "BRL"
+            description: "{{ transferData.description }}"

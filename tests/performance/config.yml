@@ -1,0 +1,20 @@
+config:
+  target: "http://localhost:3030"  # Adjust this to match your API URL
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up phase"
+    - duration: 120
+      arrivalRate: 10
+      rampTo: 20
+      name: "Ramp up load"
+    - duration: 300
+      arrivalRate: 20
+      name: "Sustained load"
+  
+  processor: "./scenarios/helpers.cjs"
+  
+  defaults:
+    headers:
+      Content-Type: "application/json"
+      Accept: "application/json"
