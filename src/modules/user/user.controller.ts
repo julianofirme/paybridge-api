@@ -21,7 +21,7 @@ export async function registerUserHandler(
 
   logger.info(`User registered successfully with ID: ${user.id}`)
   logger.info(`User wallet successfully created with ID: ${wallet.id}`)
-  return reply.code(201).send({ ...user, wallet: wallet.id })
+  return reply.code(201).send({ ...user, walletId: wallet.id })
 }
 
 export async function loginHandler(

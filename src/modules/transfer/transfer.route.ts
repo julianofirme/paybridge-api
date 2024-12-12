@@ -5,7 +5,7 @@ import { auth } from '../../middleware/auth.js';
 
 async function transferRoutes(app: FastifyInstance) {
   app.register(auth).post(
-    '/',
+    '/send',
     {
       schema: {
         body: $ref('createTransferSchema'),

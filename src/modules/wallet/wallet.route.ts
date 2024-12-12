@@ -6,7 +6,7 @@ import { auth } from '../../middleware/auth.js';
 
 async function walletRoutes(app: FastifyInstance) {
   app.register(auth).post(
-    '/deposit',
+    '/:walletId/deposit',
     {
       schema: {
         body: $ref('depositSchema'),

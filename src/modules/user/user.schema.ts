@@ -23,6 +23,7 @@ const createUserSchema = z.object({
 const createUserResponseSchema = z.object({
   id: z.string(),
   ...userCore,
+  walletId: z.string(),
 })
 
 const loginSchema = z.object({

@@ -3,7 +3,6 @@ import { buildJsonSchemas } from 'fastify-zod'
 
 export const depositSchema = z.object({
   amount: z.number().nonnegative('Amount must be non-negative'),
-  walletId: z.string().uuid('Invalid wallet ID'),
   currencyCode: z.string().default('BRL')
 });
 

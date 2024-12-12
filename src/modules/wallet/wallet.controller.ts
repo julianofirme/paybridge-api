@@ -4,11 +4,13 @@ import type { DepositInput } from './wallet.schema.js';
 
 export async function handleDeposit(
   request: FastifyRequest<{
+    Params: { walletId: string };
     Body: DepositInput;
   }>,
   reply: FastifyReply
 ) {
-  const { walletId, amount, currencyCode } = request.body;
+  const { walletId } = request.params;
+  const { amount, currencyCode } = request.body;
 
   const result = await deposit(walletId, amount, currencyCode);
 

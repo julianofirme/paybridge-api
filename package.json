@@ -38,6 +38,7 @@
     "bull": "^4.16.1",
     "dotenv": "^16.4.5",
     "env-cmd": "^10.1.0",
+    "faker": "^6.6.6",
     "fastify": "^4.28.1",
     "fastify-cli": "^6.3.0",
     "fastify-cors": "^6.1.0",
@@ -53,6 +54,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@faker-js/faker": "^9.3.0",
     "@testcontainers/postgresql": "^10.13.0",
     "@types/node": "^22.5.0",
     "@vitest/coverage-v8": "^2.0.5",
@@ -67,6 +69,7 @@
     "testcontainers": "^10.13.0",
     "tsx": "^4.19.0",
     "typescript": "^5.5.4",
+    "uuid": "^11.0.3",
     "vitest": "^2.0.5"
   },
   "lint-staged": {

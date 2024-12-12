@@ -5,3 +5,5 @@ migrations
 seeds
 
 scripts
+
+tests

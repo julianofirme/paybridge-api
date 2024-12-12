@@ -5,7 +5,7 @@ import { auth } from '../../middleware/auth.js';
 
 async function merchantRoutes(app: FastifyInstance) {
   app.register(auth).post(
-    '/',
+    '/create',
     {
       schema: {
         body: $ref('createMerchantSchema'),

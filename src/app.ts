@@ -49,10 +49,10 @@ app.get('/healthcheck', async function () {
   }
 })
 
-app.register(userRoutes)
-app.register(walletRoutes)
-app.register(merchantRoutes, { prefix: '/merchants' })
-app.register(transferRoutes, { prefix: '/transfers' })
+app.register(userRoutes, { prefix: '/auth' })
+app.register(walletRoutes, { prefix: '/wallet' })
+app.register(merchantRoutes, { prefix: '/merchant' })
+app.register(transferRoutes, { prefix: '/transfer' })
 
 app.register(fastifySwagger, {})
 app.register(fastifySwaggerUi, {
