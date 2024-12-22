@@ -1,14 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 import { validateTransfer } from './transfer.validator.js';
-import { executeTransferTransaction } from './transfer.handler.js';
 import { checkAuthorization } from '../../services/external/transfer-authorization.service.js';
 import { UnauthorizedError } from '../../errors/unauthorized-error.js';
 import type { CreateTransferInput } from './transfer.schema.js';
+import { RabbitMQPublisher } from '../../queue/rabbitmq.service.js';
 
 const prisma = new PrismaClient();
 
+const publisher = new RabbitMQPublisher('transfer_queue');
+
 export async function createTransfer(transferData: CreateTransferInput) {
-  const { sourceWalletId, destinationWalletId, amount, currencyCode, reason } = transferData;
+  const { sourceWalletId, destinationWalletId, amount, currencyCode } = transferData;
 
   await validateTransfer(prisma, sourceWalletId, destinationWalletId, amount, currencyCode);
 
@@ -17,5 +19,9 @@ export async function createTransfer(transferData: CreateTransferInput) {
     throw new UnauthorizedError('Transfer not authorized');
   }
 
-  return executeTransferTransaction(prisma, sourceWalletId, destinationWalletId, amount, currencyCode, reason ?? 'User transfer');
+  await publisher.connect();
+  await publisher.publish(transferData);
+  await publisher.close();
+
+  return { status: 'Transfer request received' };
 }
