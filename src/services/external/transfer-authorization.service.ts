@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { BadRequestError } from '../../errors/bad-request-error.js';
 import { logger } from '../../logger/logger.js';
+import { UnauthorizedError } from '../../errors/unauthorized-error.js';
 
 export async function checkAuthorization(): Promise<boolean> {
   try {
@@ -17,6 +17,6 @@ export async function checkAuthorization(): Promise<boolean> {
     return false;
   } catch (error) {
     logger.error('Error checking authorization:', error);
-    throw new BadRequestError('Authorization check failed');
+    throw new UnauthorizedError('Authorization check failed');
   }
 }
