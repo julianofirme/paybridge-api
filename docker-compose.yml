@@ -10,8 +10,7 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
 
-  redis:
-    image: redis:latest
+  rabbitmq:
+    image: rabbitmq:latest
     ports:
-      - '6379:6379'
-    command: redis-server --save 60 1
+      - '5672:5672'
