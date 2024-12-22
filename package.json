@@ -34,7 +34,7 @@
     "@fastify/swagger-ui": "^4.1.0",
     "@fastify/type-provider-typebox": "^4.1.0",
     "@prisma/client": "^6.0.1",
-    "axios": "^1.7.5",
+    "axios": "^1.7.9",
     "bull": "^4.16.1",
     "dotenv": "^16.4.5",
     "env-cmd": "^10.1.0",
