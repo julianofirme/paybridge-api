@@ -2,12 +2,12 @@ config:
   target: "http://localhost:3030"  # Adjust this to match your API URL
   phases:
     - name: "Warm up phase"  
-      arrivalRate: 10
-      duration: 20
-    - name: "Ramp up phase"  
-      arrivalRate: 10
+      arrivalRate: 20
       duration: 60
-      rampTo: 40
+    - name: "Ramp up phase"  
+      arrivalRate: 50
+      duration: 60
+      rampTo: 100
   processor: "./helpers.cjs"
 
   defaults:
